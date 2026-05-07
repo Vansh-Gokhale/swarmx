@@ -862,7 +862,7 @@ function LogLine({ log }: { log: SwarmLogEvent }) {
           [{log.agent.replace('Agent','').toUpperCase()}]
         </span>
       )}
-      {log.data?.provider && (
+      {typeof log.data?.provider === 'string' && (
         <span className={`text-[9px] font-mono shrink-0 mt-0.5 px-1.5 rounded
           ${log.data.provider === 'ollama'
             ? 'text-[#14F195] bg-[#14F19510]'
