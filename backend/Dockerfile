@@ -1,3 +1,20 @@
+FROM node:20-slim AS builder
+
+WORKDIR /app
+
+# Install ALL dependencies (including devDependencies for tsc)
+COPY package*.json ./
+RUN npm ci
+
+# Copy source, IDL, and tsconfig
+COPY tsconfig.json ./
+COPY src/ ./src/
+COPY idl/ ./idl/
+
+# Compile TypeScript
+RUN npx tsc
+
+# ── Production image ─────────────────────────────────────────────────────────
 FROM node:20-slim
 
 # Install Chromium and fonts for Puppeteer browser automation
@@ -25,16 +42,14 @@ ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 
 WORKDIR /app
 
-# Install dependencies
+# Install production-only dependencies
 COPY package*.json ./
 RUN npm ci --omit=dev
 
-# Copy source and compile TypeScript
-COPY tsconfig.json ./
-COPY src/ ./src/
-RUN npx tsc
+# Copy compiled JS from builder
+COPY --from=builder /app/dist/ ./dist/
 
-# Copy IDL files (needed at runtime)
+# Copy IDL files (needed at runtime by the compiled JS)
 COPY idl/ ./idl/
 
 EXPOSE 3009

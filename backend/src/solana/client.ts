@@ -5,7 +5,7 @@ import {
   clusterApiUrl,
 } from "@solana/web3.js";
 import { AnchorProvider, Program, BN, Wallet } from "@coral-xyz/anchor";
-import idl from "../../idl/swarmx_escrow.json";
+import idl from "./swarmx_escrow.json";
 
 let _programId: PublicKey | null = null;
 let _connection: Connection | null = null;
