@@ -1,0 +1,740 @@
+{
+  "address": "4cCfXEjstobSmNohQKuvAJMug2BKdJwNp5PoUrkKbHHm",
+  "metadata": {
+    "name": "swarmx_escrow",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "SwarmX escrow program for agentic task payments"
+  },
+  "instructions": [
+    {
+      "name": "initialize_task",
+      "docs": [
+        "User deposits USDC into a PDA vault tied to this task"
+      ],
+      "discriminator": [
+        96,
+        206,
+        3,
+        20,
+        245,
+        167,
+        60,
+        125
+      ],
+      "accounts": [
+        {
+          "name": "task",
+          "docs": [
+            "Task state PDA"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  119,
+                  97,
+                  114,
+                  109,
+                  120,
+                  95,
+                  116,
+                  97,
+                  115,
+                  107
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "task_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "vault",
+          "docs": [
+            "USDC vault PDA (holds the escrowed tokens)"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  119,
+                  97,
+                  114,
+                  109,
+                  120,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "task_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "user",
+          "docs": [
+            "User who is funding the task"
+          ],
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "orchestrator",
+          "docs": [
+            "Orchestrator wallet (stored in task for authorization)"
+          ]
+        },
+        {
+          "name": "user_ata",
+          "docs": [
+            "User's USDC ATA (source of funds)"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "user"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  6,
+                  221,
+                  246,
+                  225,
+                  215,
+                  101,
+                  161,
+                  147,
+                  217,
+                  203,
+                  225,
+                  70,
+                  206,
+                  235,
+                  121,
+                  172,
+                  28,
+                  180,
+                  133,
+                  237,
+                  95,
+                  91,
+                  55,
+                  145,
+                  58,
+                  140,
+                  245,
+                  133,
+                  126,
+                  255,
+                  0,
+                  169
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "usdc_mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "usdc_mint",
+          "docs": [
+            "Devnet USDC mint"
+          ]
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "task_id",
+          "type": "u64"
+        },
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "refund_task",
+      "docs": [
+        "Refund full USDC to user (called on agent failure)"
+      ],
+      "discriminator": [
+        8,
+        8,
+        152,
+        190,
+        24,
+        24,
+        158,
+        21
+      ],
+      "accounts": [
+        {
+          "name": "task",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  119,
+                  97,
+                  114,
+                  109,
+                  120,
+                  95,
+                  116,
+                  97,
+                  115,
+                  107
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "task_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  119,
+                  97,
+                  114,
+                  109,
+                  120,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "task_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "user_ata",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "task.user",
+                "account": "TaskAccount"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  6,
+                  221,
+                  246,
+                  225,
+                  215,
+                  101,
+                  161,
+                  147,
+                  217,
+                  203,
+                  225,
+                  70,
+                  206,
+                  235,
+                  121,
+                  172,
+                  28,
+                  180,
+                  133,
+                  237,
+                  95,
+                  91,
+                  55,
+                  145,
+                  58,
+                  140,
+                  245,
+                  133,
+                  126,
+                  255,
+                  0,
+                  169
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "usdc_mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "usdc_mint"
+        },
+        {
+          "name": "orchestrator",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "task"
+          ]
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "task_id",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "resolve_task",
+      "docs": [
+        "Orchestrator distributes USDC to agent wallets and closes the vault"
+      ],
+      "discriminator": [
+        116,
+        245,
+        180,
+        251,
+        30,
+        233,
+        101,
+        33
+      ],
+      "accounts": [
+        {
+          "name": "task",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  119,
+                  97,
+                  114,
+                  109,
+                  120,
+                  95,
+                  116,
+                  97,
+                  115,
+                  107
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "task_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "orchestrator",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "task"
+          ]
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "task_id",
+          "type": "u64"
+        },
+        {
+          "name": "payouts",
+          "type": {
+            "vec": {
+              "defined": {
+                "name": "AgentPayout"
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "TaskAccount",
+      "discriminator": [
+        235,
+        32,
+        10,
+        23,
+        81,
+        60,
+        170,
+        203
+      ]
+    }
+  ],
+  "events": [
+    {
+      "name": "TaskCreated",
+      "discriminator": [
+        49,
+        174,
+        6,
+        7,
+        71,
+        159,
+        69,
+        175
+      ]
+    },
+    {
+      "name": "TaskRefunded",
+      "discriminator": [
+        49,
+        230,
+        123,
+        76,
+        62,
+        16,
+        104,
+        128
+      ]
+    },
+    {
+      "name": "TaskResolved",
+      "discriminator": [
+        124,
+        29,
+        208,
+        226,
+        46,
+        166,
+        188,
+        14
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "TaskNotFunded",
+      "msg": "Task must be in Funded status"
+    },
+    {
+      "code": 6001,
+      "name": "PayoutMismatch",
+      "msg": "Payout amounts must sum to exact task amount"
+    },
+    {
+      "code": 6002,
+      "name": "UnauthorizedOrchestrator",
+      "msg": "Only the registered orchestrator wallet can resolve or refund"
+    },
+    {
+      "code": 6003,
+      "name": "InvalidAmount",
+      "msg": "Amount must be greater than zero"
+    },
+    {
+      "code": 6004,
+      "name": "TooManyPayouts",
+      "msg": "Maximum 10 agent payouts per task"
+    }
+  ],
+  "types": [
+    {
+      "name": "AgentPayout",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "agent",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "label",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "TaskAccount",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "task_id",
+            "type": "u64"
+          },
+          {
+            "name": "user",
+            "type": "pubkey"
+          },
+          {
+            "name": "orchestrator",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "status",
+            "type": {
+              "defined": {
+                "name": "TaskStatus"
+              }
+            }
+          },
+          {
+            "name": "created_at",
+            "type": "i64"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "vault_bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "TaskCreated",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "task_id",
+            "type": "u64"
+          },
+          {
+            "name": "user",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "TaskRefunded",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "task_id",
+            "type": "u64"
+          },
+          {
+            "name": "user",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "TaskResolved",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "task_id",
+            "type": "u64"
+          },
+          {
+            "name": "payouts",
+            "type": {
+              "vec": {
+                "defined": {
+                  "name": "AgentPayout"
+                }
+              }
+            }
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "TaskStatus",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Funded"
+          },
+          {
+            "name": "Resolved"
+          },
+          {
+            "name": "Refunded"
+          }
+        ]
+      }
+    }
+  ]
+}

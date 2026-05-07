@@ -1,166 +1,105 @@
-# SwarmX
+# 🐝 SwarmX
+**The Decentralized Agentic Marketplace on Solana**
 
-Next.js starter with Tailwind CSS, `@solana/kit`, and an Anchor vault program example.
+SwarmX is a next-generation platform that connects users with autonomous AI agents capable of executing complex web tasks via browser integration, seamlessly settling payments on the Solana Devnet. Built with cutting-edge web technologies, Solana's robust infrastructure, and state-of-the-art Large Language Models.
 
-## Getting Started
+## 🌟 Key Features
 
-```shell
-npx -y create-solana-dapp@latest -t solana-foundation/templates/kit/SwarmX
-```
+- **Decentralized Escrow on Solana Devnet**: Secure on-chain escrow transactions (`initialize_task` and `resolve_task`) using custom Anchor programs.
+- **Agentic Web Automation**: Powerful Puppeteer-driven browser integration, allowing AI to interact, navigate, and execute web-based tasks.
+- **Flexible LLM Orchestration**: Dual support for Google's Gemini SDK for stable cloud inference and local Ollama models for zero-cost, private orchestration (via Cloudflare Tunnels).
+- **Modern Next.js Frontend**: Built with Next.js 16, React 19, and Tailwind CSS v4 for a beautiful, responsive user interface.
+- **Seamless Wallet Integration**: Powered by `@solana/kit` and Wallet Standard for intuitive wallet connection, cluster switching, and real-time transaction tracking.
 
-```shell
-npm install
-npm run setup   # Builds the Anchor program and generates the TypeScript client
-npm run dev
-```
+## 🏗️ Architecture
 
-Open [http://localhost:3000](http://localhost:3000), connect your wallet, and interact with the vault.
+| Component | Technology | Description |
+|-----------|------------|-------------|
+| **Frontend** | Next.js, React 19, Tailwind v4 | User interface for task creation, tracking, and wallet management. |
+| **Backend** | Express, Node.js, Puppeteer | Orchestrates AI agents, manages web scraping/interaction, and handles task decomposition. |
+| **AI Models** | Gemini Pro / Ollama | Advanced reasoning engines powering agentic actions. |
+| **Smart Contracts** | Rust, Anchor | Secure SOL vault and task settlement escrow on Solana Devnet. |
+| **Client Gen** | Codama | Type-safe TypeScript client generation from Anchor IDL. |
 
-## What's Included
-
-- **Wallet connection** via wallet-standard with auto-discovery and dropdown UI
-- **Cluster switching** — devnet, testnet, mainnet, and localnet from the header
-- **Wallet balance** display with airdrop button (devnet/testnet/localnet)
-- **SOL Vault program** — deposit and withdraw SOL from a personal PDA vault
-- **Toast notifications** with explorer links for every transaction
-- **Error handling** — human-readable messages for common Solana and program errors
-- **Codama-generated client** — type-safe program interactions using `@solana/kit`
-- **Tailwind CSS v4** with light/dark mode toggle
-
-## Stack
-
-| Layer          | Technology                       |
-| -------------- | -------------------------------- |
-| Frontend       | Next.js 16, React 19, TypeScript |
-| Styling        | Tailwind CSS v4                  |
-| Solana Client  | `@solana/kit`, wallet-standard   |
-| Program Client | Codama-generated, `@solana/kit`  |
-| Program        | Anchor (Rust)                    |
-
-## Project Structure
-
-```
-├── app/
-│   ├── components/
-│   │   ├── cluster-context.tsx  # Cluster state (React context + localStorage)
-│   │   ├── cluster-select.tsx   # Cluster switcher dropdown
-│   │   ├── grid-background.tsx  # Solana-branded decorative grid
-│   │   ├── providers.tsx        # Wallet + theme providers
-│   │   ├── theme-toggle.tsx     # Light/dark mode toggle
-│   │   ├── vault-card.tsx       # Vault deposit/withdraw UI
-│   │   └── wallet-button.tsx    # Wallet connect/disconnect dropdown
-│   ├── generated/vault/        # Codama-generated program client
-│   ├── lib/
-│   │   ├── wallet/             # Wallet-standard connection layer
-│   │   │   ├── types.ts        # Wallet types
-│   │   │   ├── standard.ts     # Wallet discovery + session creation
-│   │   │   ├── signer.ts       # WalletSession → TransactionSigner
-│   │   │   └── context.tsx     # WalletProvider + useWallet() hook
-│   │   ├── hooks/
-│   │   │   ├── use-balance.ts  # SWR-based balance fetching
-│   │   │   └── use-send-transaction.ts  # Transaction send with loading state
-│   │   ├── cluster.ts          # Cluster endpoints + RPC factory
-│   │   ├── lamports.ts         # SOL/lamports conversion
-│   │   ├── send-transaction.ts # Transaction build + sign + send pipeline
-│   │   ├── errors.ts           # Transaction error parsing
-│   │   └── explorer.ts         # Explorer URL builder + address helpers
-│   └── page.tsx                # Main page
-├── anchor/                     # Anchor workspace
-│   └── programs/vault/         # Vault program (Rust)
-└── codama.json                 # Codama client generation config
-```
-
-## Local Development
-
-To test against a local validator instead of devnet:
-
-1. **Start a local validator**
-
-   ```bash
-   solana-test-validator
-   ```
-
-2. **Deploy the program locally**
-
-   ```bash
-   solana config set --url localhost
-   cd anchor
-   anchor build
-   anchor deploy
-   cd ..
-   npm run codama:js   # Regenerate client with local program ID
-   ```
-
-3. **Switch to localnet** in the app using the cluster selector in the header.
-
-## Deploy Your Own Vault
-
-The included vault program is already deployed to devnet. To deploy your own:
+## 🚀 Getting Started
 
 ### Prerequisites
 
-- [Rust](https://rustup.rs/)
-- [Solana CLI](https://solana.com/docs/intro/installation)
-- [Anchor](https://www.anchor-lang.com/docs/installation)
+- Node.js (v18+)
+- Rust & Solana CLI (for local smart contract development)
+- Anchor CLI
+- Docker (for isolated Puppeteer browser automation)
+- A local Ollama instance (optional, for local LLM routing)
 
-### Steps
+### Installation
 
-1. **Configure Solana CLI for devnet**
-
+1. **Clone the repository:**
    ```bash
-   solana config set --url devnet
+   git clone https://github.com/Vansh-Gokhale/swarmx.git
+   cd swarmx
    ```
 
-2. **Create a wallet (if needed) and fund it**
-
+2. **Install dependencies:**
    ```bash
-   solana-keygen new
-   solana airdrop 2
+   npm install
+   cd backend && npm install && cd ..
    ```
 
-3. **Build and deploy the program**
+3. **Set up environment variables:**
+   - Configure your `.env.local` in the app directory for Solana RPC and frontend settings.
+   - Configure `.env` in the `backend/` directory with your Gemini API keys and/or local Ollama endpoints.
 
+4. **Build the Anchor program and generate clients:**
    ```bash
-   cd anchor
-   anchor build
-   anchor keys sync    # Updates program ID in source
-   anchor build        # Rebuild with new ID
-   anchor deploy
-   cd ..
+   npm run setup
    ```
 
-4. **Regenerate the client and restart**
-   ```bash
-   npm run setup   # Rebuilds program and regenerates client
-   npm run dev
-   ```
+### Running Locally
 
-## Testing
-
-Tests use [LiteSVM](https://github.com/LiteSVM/litesvm), a fast lightweight Solana VM for testing.
-
+**1. Start the Backend Orchestrator (Port 3009):**
 ```bash
-npm run anchor-build   # Build the program first
-npm run anchor-test    # Run tests
+cd backend
+npm run dev
 ```
 
-The tests are in `anchor/programs/vault/src/tests.rs` and automatically use the program ID from `declare_id!`.
-
-## Regenerating the Client
-
-If you modify the program, regenerate the TypeScript client:
-
+**2. Start the Frontend Application (Port 3011):**
 ```bash
-npm run setup   # Or: npm run anchor-build && npm run codama:js
+npm run dev
 ```
 
-This uses [Codama](https://github.com/codama-idl/codama) to generate a type-safe client from the Anchor IDL.
+**3. Test Smart Contracts (LiteSVM):**
+```bash
+npm run anchor-test
+```
 
-## Learn More
+## 🌐 Agent Deployment (Local LLMs)
 
-- [Solana Docs](https://solana.com/docs) — core concepts and guides
-- [Anchor Docs](https://www.anchor-lang.com/docs/introduction) — program development framework
-- [Deploying Programs](https://solana.com/docs/programs/deploying) — deployment guide
-- [@solana/kit](https://github.com/anza-xyz/kit) — Solana JavaScript SDK
-- [Codama](https://github.com/codama-idl/codama) — client generation from IDL
-# swarmx
+SwarmX supports routing AI requests to a local Ollama instance to achieve zero-cost orchestration.
+
+1. Ensure Ollama is running locally with your desired model (e.g., `llama3`).
+2. Expose the local instance via a Cloudflare Tunnel if bridging to a production backend.
+3. Update the backend `.env` to route agent tasks through the offline endpoint.
+
+## 📜 Smart Contract (Escrow & Vault)
+
+The SwarmX Solana program manages agent compensation securely.
+- **`initialize_task`**: Users deposit SOL into a PDA vault when creating a task.
+- **`resolve_task`**: The backend orchestrator submits proof of completion to release funds to the agent's wallet.
+
+To deploy your own program to Devnet:
+```bash
+cd anchor
+anchor build
+anchor keys sync
+anchor deploy
+cd ..
+npm run setup
+```
+
+## 🤝 Contributing
+
+Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/Vansh-Gokhale/swarmx/issues).
+
+## 📄 License
+
+This project is licensed under the MIT License.

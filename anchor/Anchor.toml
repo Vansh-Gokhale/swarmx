@@ -6,6 +6,7 @@ skip-lint = false
 
 [programs.devnet]
 vault = "BvWjUrk6KaPf4dcwYnuceLoDiuprKAotJpMEm7qcTCxg"
+swarmx_escrow = "4cCfXEjstobSmNohQKuvAJMug2BKdJwNp5PoUrkKbHHm"
 
 [registry]
 url = "https://api.apr.dev"
